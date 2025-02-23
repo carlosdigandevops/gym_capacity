@@ -1,0 +1,35 @@
+name: Frontend CI
+
+on:
+  push:
+    paths:
+      - "frontend/**"  # ✅ Only run when frontend files change
+  pull_request:
+    paths:
+      - "frontend/**"
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install
+        working-directory: frontend  # ✅ Install frontend dependencies
+
+      - name: Run Linter
+        run: pnpm run lint
+        working-directory: frontend
+
+      - name: Run Tests
+        run: pnpm run test
+        working-directory: frontend
